@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>체중·운동 기록</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <button class="icon-btn" id="prevDay" aria-label="이전 날">‹</button>
+    <label class="date-wrap">
+      <input type="date" id="datePicker" />
+      <span id="dateLabel"></span>
+    </label>
+    <button class="icon-btn" id="nextDay" aria-label="다음 날">›</button>
+  </header>
+
+  <main>
+    <!-- 오늘 탭 -->
+    <section class="tab" id="tab-today">
+      <div class="card">
+        <h2>체중</h2>
+        <div class="weight-grid">
+          <label class="weight-box">
+            <span class="wlabel">☀️ 아침</span>
+            <input type="number" inputmode="decimal" step="0.1" min="0" id="wAm" placeholder="kg" />
+          </label>
+          <label class="weight-box">
+            <span class="wlabel">🌙 저녁</span>
+            <input type="number" inputmode="decimal" step="0.1" min="0" id="wPm" placeholder="kg" />
+          </label>
+        </div>
+        <p class="hint" id="weightDiff"></p>
+      </div>
+
+      <div class="card">
+        <h2>운동 <span class="badge" id="exCount"></span></h2>
+        <ul class="ex-list" id="exList"></ul>
+
+        <form id="exForm" class="ex-form" autocomplete="off">
+          <input type="text" id="exName" placeholder="운동 이름 (예: 스쿼트, 러닝)" list="exNames" required />
+          <datalist id="exNames"></datalist>
+          <div class="row">
+            <label><span>세트</span><input type="number" inputmode="numeric" min="0" id="exSets" /></label>
+            <label><span>횟수</span><input type="number" inputmode="numeric" min="0" id="exReps" /></label>
+            <label><span>무게(kg)</span><input type="number" inputmode="decimal" step="0.5" min="0" id="exKg" /></label>
+            <label><span>시간(분)</span><input type="number" inputmode="numeric" min="0" id="exMin" /></label>
+          </div>
+          <input type="text" id="exMemo" placeholder="메모 (선택)" />
+          <div class="form-actions">
+            <button type="button" class="btn ghost" id="exCancel" hidden>취소</button>
+            <button type="submit" class="btn primary" id="exSubmit">+ 운동 추가</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 그래프 탭 -->
+    <section class="tab" id="tab-chart" hidden>
+      <div class="card">
+        <div class="chart-head">
+          <h2>체중 변화</h2>
+          <div class="seg" id="rangeSeg">
+            <button data-range="7">1주</button>
+            <button data-range="30" class="on">1달</button>
+            <button data-range="90">3달</button>
+            <button data-range="365">1년</button>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i class="dot am"></i>아침</span>
+          <span><i class="dot pm"></i>저녁</span>
+        </div>
+        <div id="chart" class="chart"></div>
+        <div class="stats" id="stats"></div>
+      </div>
+      <div class="card">
+        <h2>운동 횟수</h2>
+        <div id="exHeat" class="heat"></div>
+        <p class="hint" id="exSummary"></p>
+      </div>
+    </section>
+
+    <!-- 기록 탭 -->
+    <section class="tab" id="tab-history" hidden>
+      <div class="card">
+        <h2>전체 기록</h2>
+        <ul class="history" id="history"></ul>
+      </div>
+      <div class="card">
+        <h2>데이터 백업</h2>
+        <p class="hint">기록은 이 기기의 브라우저에 저장돼요. 기기를 바꾸거나 브라우저 데이터를 지우기 전에 백업하세요.</p>
+        <div class="form-actions">
+          <button class="btn ghost" id="importBtn">가져오기</button>
+          <button class="btn primary" id="exportBtn">내보내기 (JSON)</button>
+          <input type="file" id="importFile" accept="application/json,.json" hidden />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button data-tab="today" class="on"><span>📝</span>기록하기</button>
+    <button data-tab="chart"><span>📈</span>그래프</button>
+    <button data-tab="history"><span>📅</span>전체 기록</button>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
