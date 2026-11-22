@@ -1,6 +1,6 @@
 // 앱 파일을 캐시해서 오프라인에서도 열리게 함 (네트워크 우선, 실패 시 캐시)
-const CACHE = 'fitlog-v1';
-const FILES = ['./', 'index.html', 'style.css', 'app.js', 'manifest.webmanifest', 'icon.svg'];
+const CACHE = 'fitlog-v2';
+const FILES = ['./', 'index.html', 'style.css', 'app.js', 'manifest.webmanifest', 'icon.svg', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)));

@@ -41,9 +41,14 @@ body {
   background: var(--bg);
   color: var(--text);
   -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: none;
   padding-bottom: calc(72px + env(safe-area-inset-bottom));
 }
 button, input { font: inherit; color: inherit; }
+button { touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+.topbar, .tabbar { -webkit-user-select: none; user-select: none; }
+#tab-today { touch-action: pan-y; }
 
 .topbar {
   position: sticky; top: 0; z-index: 5;

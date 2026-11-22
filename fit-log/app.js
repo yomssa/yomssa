@@ -330,14 +330,36 @@ $('history').addEventListener('click', (e) => {
 });
 
 /* ---------- 백업 ---------- */
-$('exportBtn').onclick = () => {
-  const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+$('exportBtn').onclick = async () => {
+  const name = `fitlog-${today()}.json`;
+  const text = JSON.stringify(db, null, 2);
+  const file = new File([text], name, { type: 'application/json' });
+  // 아이폰: 공유 시트 → '파일에 저장'으로 iCloud Drive 등에 보관
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: '핏로그 백업' });
+      markBackup();
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+    }
+  }
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `fitlog-${today()}.json`;
+  a.href = URL.createObjectURL(file);
+  a.download = name;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  markBackup();
 };
+function markBackup() {
+  try { localStorage.setItem(KEY + '.lastBackup', today()); } catch (e) { /* 무시 */ }
+  renderLastBackup();
+}
+function renderLastBackup() {
+  let d = null;
+  try { d = localStorage.getItem(KEY + '.lastBackup'); } catch (e) { /* 무시 */ }
+  $('lastBackup').textContent = d ? `마지막 백업: ${prettyDate(d)}` : '아직 백업한 적이 없어요';
+}
 $('importBtn').onclick = () => $('importFile').click();
 $('importFile').onchange = async (e) => {
   const f = e.target.files[0];
@@ -361,7 +383,7 @@ function showTab(name) {
   for (const b of document.querySelectorAll('.tabbar button')) b.classList.toggle('on', b.dataset.tab === name);
   for (const s of document.querySelectorAll('.tab')) s.hidden = s.id !== `tab-${name}`;
   if (name === 'chart') renderChart();
-  if (name === 'history') renderHistory();
+  if (name === 'history') { renderHistory(); renderLastBackup(); }
   window.scrollTo(0, 0);
 }
 document.querySelector('.tabbar').addEventListener('click', (e) => {
@@ -374,6 +396,41 @@ function renderAll() {
   renderNameSuggestions();
 }
 renderAll();
+
+/* ---------- 좌우로 밀어서 날짜 이동 ---------- */
+(() => {
+  const area = $('tab-today');
+  let sx = 0, sy = 0, tracking = false;
+  area.addEventListener('touchstart', (e) => {
+    if (e.target.closest('input, button')) { tracking = false; return; }
+    const t = e.touches[0];
+    sx = t.clientX; sy = t.clientY; tracking = true;
+  }, { passive: true });
+  area.addEventListener('touchend', (e) => {
+    if (!tracking) return;
+    tracking = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      setDate(addDays(current, dx < 0 ? 1 : -1));
+    }
+  }, { passive: true });
+})();
+
+// 앱을 다시 열었을 때 날짜가 바뀌었으면 오늘로 이동
+let openedOn = today();
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (today() !== openedOn) {
+    if (current === openedOn) setDate(today());
+    openedOn = today();
+  }
+});
+
+// 저장된 기록이 브라우저 정리 때 지워지지 않도록 영구 저장 요청
+if (navigator.storage && navigator.storage.persist) {
+  navigator.storage.persist().catch(() => {});
+}
 
 /* ---------- 오프라인 지원 ---------- */
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {

@@ -3,11 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#2563eb" />
-  <title>체중·운동 기록</title>
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1a1d23" media="(prefers-color-scheme: dark)" />
+  <!-- 아이폰 홈 화면 앱 설정 -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="핏로그" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>핏로그</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -94,7 +101,8 @@
       </div>
       <div class="card">
         <h2>데이터 백업</h2>
-        <p class="hint">기록은 이 기기의 브라우저에 저장돼요. 기기를 바꾸거나 브라우저 데이터를 지우기 전에 백업하세요.</p>
+        <p class="hint">기록은 이 휴대폰 안에만 저장돼요. 기기를 바꾸거나 앱을 지우기 전에 꼭 내보내기로 백업하세요. (아이폰은 공유 시트에서 '파일에 저장'을 고르면 iCloud Drive에 보관돼요)</p>
+        <p class="hint" id="lastBackup"></p>
         <div class="form-actions">
           <button class="btn ghost" id="importBtn">가져오기</button>
           <button class="btn primary" id="exportBtn">내보내기 (JSON)</button>
