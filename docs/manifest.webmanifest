@@ -1,0 +1,16 @@
+{
+  "name": "순익 장부",
+  "short_name": "순익 장부",
+  "description": "매일 입금·출금으로 날짜별·주별·요일별·월별 순익을 계산합니다.",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6f4",
+  "theme_color": "#2f6b57",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>순익 장부</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="순익 장부">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f5f6f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151917" media="(prefers-color-scheme: dark)">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{
+  --bg:#f5f6f4; --card:#ffffff; --fg:#1d2321; --muted:#68716d; --line:#dde1de; --grid:#eceeec;
+  --in:#1f5fbf; --out:#c8372d; --accent:#2f6b57; --cum:#2f6b57; --bar:rgba(245,246,244,.92);
+  --sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#151917; --card:#1d2220; --fg:#e7ebe9; --muted:#97a19c; --line:#323935; --grid:#272d2a;
+  --in:#6ea2f0; --out:#f07a6e; --accent:#7cc3a6; --cum:#7cc3a6; --bar:rgba(21,25,23,.92); color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;
+  -webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+[hidden]{display:none!important}
+.top{position:sticky;top:0;z-index:5;background:var(--bar);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:calc(env(safe-area-inset-top,0px) + 8px) max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));
+  display:flex;align-items:center;justify-content:space-between;gap:10px}
+.top h1{font-size:18px;margin:0}
+.month{display:flex;align-items:center;gap:4px}
+.month b{font-family:var(--mono);font-size:16px;min-width:84px;text-align:center}
+.month button{width:36px;height:36px;padding:0;font-size:20px;line-height:1}
+main{max-width:780px;margin:0 auto;
+  padding:16px max(16px,env(safe-area-inset-right,0px)) calc(84px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  display:flex;flex-direction:column;gap:18px}
+.view{display:flex;flex-direction:column;gap:18px}
+h2{font-size:16px;margin:0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.sec-head small{color:var(--muted);font-size:12px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:10px;padding:8px 14px}
+button:active{opacity:.7}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.pos{color:var(--in)} .neg{color:var(--out)} .zero{color:var(--muted)}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.tile span{display:block;font-size:12px;color:var(--muted)}
+.tile strong{display:block;font-family:var(--mono);font-size:clamp(13px,3.7vw,22px);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:clip}
+.tile.net{border-color:var(--accent)}
+form{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
+input{font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 10px;min-width:0;width:100%;-webkit-appearance:none;appearance:none}
+input[type=date]{min-height:42px}
+.full{grid-column:1/-1}
+.kind{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.kind button{border:0;border-radius:0;padding:9px 0;background:var(--bg);color:var(--muted);font-size:15px}
+.kind button[aria-pressed="true"].k-in{background:var(--in);color:#fff}
+.kind button[aria-pressed="true"].k-out{background:var(--out);color:#fff}
+.add{background:var(--accent);color:#fff;border-color:var(--accent);padding:11px;font-size:16px;font-weight:600}
+.status{font-size:13px;color:var(--muted);min-height:1.2em;margin-top:-8px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.chart{padding:10px 6px 2px;border-bottom:1px solid var(--line)}
+.plot svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);padding:2px 8px 8px}
+.legend span{display:inline-flex;align-items:center;white-space:nowrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.legend i.line{height:3px;width:14px}
+.legend svg{flex:none;margin-right:5px}
+.tablebox{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 6px;border-bottom:1px solid var(--line)}
+td:first-child{white-space:nowrap}
+@media (max-width:430px){table{font-size:13px}}
+th{font-size:12px;color:var(--muted);font-weight:500;text-align:right}
+th:first-child,td:first-child{text-align:left}
+tbody tr:last-child td{border-bottom:0}
+tfoot td{font-weight:700;border-top:2px solid var(--line);border-bottom:0}
+tr.day{cursor:pointer}
+tr.cur td{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.dow{color:var(--muted);font-size:12px;margin-left:4px}
+.dow.sun{color:var(--out)} .dow.sat{color:var(--in)}
+.sub{color:var(--muted);font-size:11px;margin-left:4px}
+#tWeek .sub{display:block;margin:0}
+tr.detail td{background:var(--bg);font-size:13px;padding:6px 8px 6px 18px}
+.items{display:flex;flex-direction:column;gap:6px}
+.item{display:flex;align-items:center;gap:8px}
+.item .memo{flex:1;min-width:0;overflow-wrap:anywhere;color:var(--muted)}
+.item button{padding:4px 10px;font-size:13px}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+svg .gl{stroke:var(--grid);stroke-width:1}
+svg .zl{stroke:var(--muted);stroke-width:1}
+svg .b-in,svg .b-pos{fill:var(--in)} svg .b-out,svg .b-neg{fill:var(--out)}
+svg .cum{fill:none;stroke:var(--cum);stroke-width:2.2;stroke-linejoin:round}
+svg .net{fill:var(--card);stroke:var(--fg);stroke-width:2}
+svg .dot{fill:var(--cum)}
+svg rect.hit{fill:transparent}
+.tip{font-size:13px;color:var(--fg);padding:6px 10px 10px;min-height:2.6em;font-variant-numeric:tabular-nums}
+.tip:empty::before{content:"그래프를 누르면 금액이 나옵니다";color:var(--muted)}
+.settings{display:flex;flex-direction:column;gap:10px}
+.settings .panel{padding:14px;display:flex;flex-direction:column;gap:10px}
+.settings p{margin:0;color:var(--muted);font-size:13px}
+.settings .row{display:flex;gap:8px;flex-wrap:wrap}
+.danger{color:var(--out);border-color:var(--out)}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--bar);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);
+  padding:4px max(6px,env(safe-area-inset-right,0px)) calc(4px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
+.tabs button{border:0;background:none;border-radius:8px;padding:6px 0 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted)}
+.tabs button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabs button[aria-current="page"]{color:var(--accent)}
+@media (prefers-reduced-motion:no-preference){.view{animation:fade .18s ease-out}@keyframes fade{from{opacity:.4}to{opacity:1}}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1 id="title">장부</h1>
+  <div class="month">
+    <button id="prev" type="button" aria-label="이전 달">‹</button>
+    <b id="monthLabel">—</b>
+    <button id="next" type="button" aria-label="다음 달">›</button>
+  </div>
+</header>
+
+<main>
+  <!-- 장부: 요약 + 입력 + 날짜별 -->
+  <div class="view" id="v-home">
+    <div class="summary">
+      <div class="tile"><span>이번 달 수입</span><strong id="sumIn" class="pos">0</strong></div>
+      <div class="tile"><span>이번 달 지출</span><strong id="sumOut" class="neg">0</strong></div>
+      <div class="tile net"><span>누적 순익</span><strong id="sumNet" class="zero">0</strong></div>
+    </div>
+    <form id="entry" autocomplete="off">
+      <label>날짜<input id="fDate" type="date" required></label>
+      <label>구분
+        <div class="kind" role="group" aria-label="구분">
+          <button type="button" id="kIn" class="k-in" aria-pressed="true">입금</button>
+          <button type="button" id="kOut" class="k-out" aria-pressed="false">출금</button>
+        </div>
+      </label>
+      <label>금액 (원)<input id="fAmt" inputmode="numeric" pattern="[0-9,]*" placeholder="35,000" required></label>
+      <label>메모<input id="fMemo" placeholder="선택"></label>
+      <button class="add full" type="submit" id="addBtn">추가</button>
+    </form>
+    <div class="status" id="status"></div>
+    <section>
+      <div class="sec-head"><h2>날짜별</h2><small>행을 누르면 내역</small></div>
+      <div class="panel">
+        <div class="chart"><div class="plot" id="cDaily"></div>
+          <div class="legend"><span><i style="background:var(--in)"></i>순익 +</span><span><i style="background:var(--out)"></i>순익 −</span><span><i class="line" style="background:var(--cum)"></i>누적</span></div>
+          <div class="tip" data-tip></div></div>
+        <div class="tablebox"><table>
+          <thead><tr><th>날짜</th><th>수입</th><th>지출</th><th>순익</th><th>누적</th></tr></thead>
+          <tbody id="tDaily"></tbody>
+        </table></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="view" id="v-week" hidden>
+    <section>
+      <div class="sec-head"><h2>주별 합계</h2><small>월요일 시작 · 이번 달 날짜만</small></div>
+      <div class="panel">
+        <div class="chart"><div class="plot" id="cWeek"></div><div class="legend" data-legend></div><div class="tip" data-tip></div></div>
+        <div class="tablebox"><table>
+          <thead><tr><th>주</th><th>수입</th><th>지출</th><th>순익</th><th>누적</th></tr></thead>
+          <tbody id="tWeek"></tbody><tfoot id="fWeek"></tfoot>
+        </table></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="view" id="v-dow" hidden>
+    <section>
+      <div class="sec-head"><h2>요일별 합계</h2><small>이번 달 기준</small></div>
+      <div class="panel">
+        <div class="chart"><div class="plot" id="cDow"></div><div class="legend" data-legend></div><div class="tip" data-tip></div></div>
+        <div class="tablebox"><table>
+          <thead><tr><th>요일</th><th>수입</th><th>지출</th><th>순익</th><th>평균/일</th></tr></thead>
+          <tbody id="tDow"></tbody>
+        </table></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="view" id="v-month" hidden>
+    <section>
+      <div class="sec-head"><h2 id="monthTitle">월별 합계</h2><small>1~12월 · 누적은 연초부터</small></div>
+      <div class="panel">
+        <div class="chart"><div class="plot" id="cMonth"></div><div class="legend" data-legend></div><div class="tip" data-tip></div></div>
+        <div class="tablebox"><table>
+          <thead><tr><th>월</th><th>수입</th><th>지출</th><th>순익</th><th>누적</th></tr></thead>
+          <tbody id="tMonth"></tbody><tfoot id="fMonth"></tfoot>
+        </table></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="view settings" id="v-set" hidden>
+    <div class="panel">
+      <h2>백업</h2>
+      <p>기록은 이 폰 안에만 저장됩니다. 폰을 바꾸거나 앱을 지우기 전에 백업 파일을 저장해 두세요.</p>
+      <div class="row">
+        <button type="button" id="exportJson">백업 저장</button>
+        <button type="button" id="importBtn">백업 불러오기</button>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+      </div>
+      <button type="button" id="exportCsv">엑셀용 CSV 저장</button>
+      <p id="countInfo"></p>
+    </div>
+    <div class="panel">
+      <h2>홈 화면에 추가 (아이폰)</h2>
+      <p>Safari에서 이 페이지를 열고 아래쪽 <b>공유 버튼(□↑)</b> → <b>홈 화면에 추가</b>를 누르면 앱 아이콘이 생깁니다. 인터넷이 없어도 열립니다.</p>
+    </div>
+    <div class="panel">
+      <h2>전체 삭제</h2>
+      <p>모든 기록을 지웁니다. 되돌릴 수 없으니 먼저 백업하세요.</p>
+      <button type="button" class="danger" id="wipe">모든 기록 삭제</button>
+    </div>
+  </div>
+</main>
+
+<nav class="tabs" aria-label="화면">
+  <button type="button" data-view="home" aria-current="page"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg>장부</button>
+  <button type="button" data-view="week"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>주별</button>
+  <button type="button" data-view="dow"><svg viewBox="0 0 24 24"><path d="M5 20V11M10 20V6M15 20v-7M20 20V9"/></svg>요일별</button>
+  <button type="button" data-view="month"><svg viewBox="0 0 24 24"><path d="M4 19h16"/><path d="M5 15l4-5 4 3 6-7"/></svg>월별</button>
+  <button type="button" data-view="set"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>설정</button>
+</nav>
+
+<script src="app.js"></script>
+</body>
+</html>
