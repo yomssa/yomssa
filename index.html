@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f6fed">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="안약 체크">
+<title>안약 체크</title>
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --text: #1b2230;
+    --muted: #6b7585;
+    --line: #e3e7ee;
+    --accent: #2f6fed;
+    --done: #1fa67a;
+    --done-bg: #e6f6f0;
+    --partial: #f0a500;
+    --shadow: 0 1px 3px rgba(20, 30, 50, .08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #11151c;
+      --card: #1b212b;
+      --text: #e8ecf2;
+      --muted: #8d97a8;
+      --line: #2a323f;
+      --accent: #5b8dff;
+      --done: #3cc994;
+      --done-bg: #173329;
+      --partial: #f4b73a;
+      --shadow: none;
+    }
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    padding: env(safe-area-inset-top) 16px calc(24px + env(safe-area-inset-bottom));
+  }
+  .wrap { max-width: 520px; margin: 0 auto; }
+
+  header { padding: 18px 0 8px; }
+  .datebar { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .datebar button {
+    border: 0; background: var(--card); color: var(--text);
+    width: 44px; height: 44px; border-radius: 12px; font-size: 20px;
+    box-shadow: var(--shadow); cursor: pointer;
+  }
+  .datebar input[type=date] {
+    position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;
+  }
+  .datetitle { text-align: center; flex: 1; cursor: pointer; }
+  .datetitle .d { font-size: 20px; font-weight: 700; }
+  .datetitle .sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .today-btn {
+    display: block; margin: 8px auto 0; border: 0; background: transparent;
+    color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer; visibility: hidden;
+  }
+  .today-btn.show { visibility: visible; }
+
+  .week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 10px 0 14px; }
+  .day {
+    border: 0; background: var(--card); color: var(--text); border-radius: 12px;
+    padding: 8px 0 10px; text-align: center; cursor: pointer; box-shadow: var(--shadow);
+    font: inherit;
+  }
+  .day .w { font-size: 11px; color: var(--muted); }
+  .day .n { font-size: 16px; font-weight: 600; margin: 2px 0 6px; }
+  .day .dot { width: 8px; height: 8px; border-radius: 50%; margin: 0 auto; background: var(--line); }
+  .day .dot.partial { background: var(--partial); }
+  .day .dot.full { background: var(--done); }
+  .day.sel { outline: 2px solid var(--accent); }
+  .day.future { opacity: .45; }
+
+  .progress {
+    background: var(--card); border-radius: 16px; padding: 14px 16px; box-shadow: var(--shadow);
+    display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+  }
+  .bar { flex: 1; height: 10px; background: var(--line); border-radius: 99px; overflow: hidden; }
+  .bar > div { height: 100%; width: 0; background: var(--done); border-radius: 99px; transition: width .25s; }
+  .progress .num { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 52px; text-align: right; }
+
+  section {
+    background: var(--card); border-radius: 16px; padding: 6px 16px 8px;
+    margin-bottom: 12px; box-shadow: var(--shadow);
+  }
+  section h2 {
+    font-size: 15px; margin: 10px 0 4px; display: flex; justify-content: space-between; align-items: center;
+  }
+  section h2 .cnt { font-size: 13px; color: var(--muted); font-weight: 500; }
+  section h2 .cnt.ok { color: var(--done); }
+
+  .item {
+    display: flex; align-items: center; gap: 12px; padding: 10px 0;
+    border-top: 1px solid var(--line);
+  }
+  .item:first-of-type { border-top: 0; }
+  .item .name { flex: 1; font-size: 16px; }
+  .item .name small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .checks { display: flex; gap: 8px; }
+  .chk {
+    min-width: 64px; height: 44px; border-radius: 12px; border: 2px solid var(--line);
+    background: transparent; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600;
+    cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    line-height: 1.1; transition: background .15s, border-color .15s;
+  }
+  .chk .t { font-size: 10px; font-weight: 500; }
+  .chk.on { background: var(--done-bg); border-color: var(--done); color: var(--done); }
+  .chk:active { transform: scale(.96); }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom));
+    transform: translateX(-50%) translateY(20px); opacity: 0;
+    background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 99px;
+    font-size: 14px; transition: .2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="datebar">
+      <button id="prev" aria-label="이전 날">‹</button>
+      <div class="datetitle" id="title">
+        <div class="d" id="dateText"></div>
+        <div class="sub" id="dateSub"></div>
+        <input type="date" id="picker">
+      </div>
+      <button id="next" aria-label="다음 날">›</button>
+    </div>
+    <button class="today-btn" id="todayBtn">오늘로 이동</button>
+  </header>
+
+  <div class="week" id="week"></div>
+
+  <div class="progress">
+    <div class="bar"><div id="barFill"></div></div>
+    <div class="num" id="progNum">0 / 0</div>
+  </div>
+
+  <div id="list"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== 안약 스케줄 =====
+// times: 해당 시간대에 몇 번 넣는지
+const SCHEDULE = [
+  { id: 'morning', label: '🌅 아침', drops: [
+    { id: 'levakay', name: '레바케이', times: 1 },
+    { id: 'tears',   name: '인공눈물', times: 2 },
+  ]},
+  { id: 'lunch', label: '☀️ 점심', drops: [
+    { id: 'levakay', name: '레바케이', times: 1 },
+    { id: 'tears',   name: '인공눈물', times: 2 },
+  ]},
+  { id: 'evening', label: '🌇 저녁', drops: [
+    { id: 'levakay', name: '레바케이', times: 1 },
+    { id: 'tears',   name: '인공눈물', times: 2 },
+  ]},
+  { id: 'bedtime', label: '🌙 자기 전', drops: [
+    { id: 'taflotan', name: '타플로탄에스', times: 1 },
+  ]},
+];
+const TOTAL = SCHEDULE.reduce((s, sl) => s + sl.drops.reduce((a, d) => a + d.times, 0), 0);
+const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
+const PREFIX = 'eyedrop:';
+
+// ===== 저장 =====
+function load(key) {
+  try { return JSON.parse(localStorage.getItem(PREFIX + key)) || {}; } catch { return {}; }
+}
+function save(key, data) {
+  try {
+    if (Object.keys(data).length) localStorage.setItem(PREFIX + key, JSON.stringify(data));
+    else localStorage.removeItem(PREFIX + key);
+  } catch { toast('저장에 실패했어요'); }
+}
+
+// ===== 날짜 유틸 =====
+const pad = n => String(n).padStart(2, '0');
+const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const fromKey = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const todayKey = () => keyOf(new Date());
+
+let current = todayKey();
+
+function countDone(data) { return Object.keys(data).length; }
+
+// ===== 렌더 =====
+function render() {
+  const d = fromKey(current);
+  const tk = todayKey();
+  document.getElementById('dateText').textContent =
+    `${d.getMonth() + 1}월 ${d.getDate()}일 (${WEEKDAYS[d.getDay()]})`;
+  const diff = Math.round((fromKey(current) - fromKey(tk)) / 86400000);
+  document.getElementById('dateSub').textContent =
+    diff === 0 ? '오늘' : diff === -1 ? '어제' : diff === 1 ? '내일' : `${d.getFullYear()}년`;
+  document.getElementById('todayBtn').classList.toggle('show', current !== tk);
+  document.getElementById('picker').value = current;
+
+  renderWeek();
+
+  const data = load(current);
+  const done = countDone(data);
+  document.getElementById('barFill').style.width = (done / TOTAL * 100) + '%';
+  document.getElementById('progNum').textContent = `${done} / ${TOTAL}`;
+
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  for (const slot of SCHEDULE) {
+    const sec = document.createElement('section');
+    let slotTotal = 0, slotDone = 0;
+    const items = slot.drops.map(drop => {
+      const row = document.createElement('div');
+      row.className = 'item';
+      const name = document.createElement('div');
+      name.className = 'name';
+      name.textContent = drop.name;
+      if (drop.times > 1) {
+        const s = document.createElement('small');
+        s.textContent = `${drop.times}번`;
+        name.appendChild(s);
+      }
+      const checks = document.createElement('div');
+      checks.className = 'checks';
+      for (let i = 1; i <= drop.times; i++) {
+        const k = `${slot.id}.${drop.id}.${i}`;
+        slotTotal++;
+        const btn = document.createElement('button');
+        btn.className = 'chk';
+        if (data[k]) {
+          slotDone++;
+          btn.classList.add('on');
+          const t = new Date(data[k]);
+          btn.innerHTML = `✓<span class="t">${pad(t.getHours())}:${pad(t.getMinutes())}</span>`;
+        } else {
+          btn.textContent = drop.times > 1 ? `${i}회` : '체크';
+        }
+        btn.onclick = () => toggle(k);
+        checks.appendChild(btn);
+      }
+      row.append(name, checks);
+      return row;
+    });
+    const h = document.createElement('h2');
+    h.innerHTML = `<span>${slot.label}</span><span class="cnt ${slotDone === slotTotal ? 'ok' : ''}">${slotDone === slotTotal ? '완료 ✓' : `${slotDone}/${slotTotal}`}</span>`;
+    sec.appendChild(h);
+    items.forEach(r => sec.appendChild(r));
+    list.appendChild(sec);
+  }
+}
+
+function renderWeek() {
+  const week = document.getElementById('week');
+  week.innerHTML = '';
+  const cur = fromKey(current);
+  const start = addDays(cur, -cur.getDay()); // 일요일 시작
+  const tk = todayKey();
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(start, i);
+    const k = keyOf(d);
+    const n = countDone(load(k));
+    const b = document.createElement('button');
+    b.className = 'day' + (k === current ? ' sel' : '') + (k > tk ? ' future' : '');
+    b.innerHTML = `<div class="w">${WEEKDAYS[d.getDay()]}</div><div class="n">${d.getDate()}</div>
+      <div class="dot ${n >= TOTAL ? 'full' : n > 0 ? 'partial' : ''}"></div>`;
+    b.onclick = () => { current = k; render(); };
+    week.appendChild(b);
+  }
+}
+
+function toggle(k) {
+  const data = load(current);
+  if (data[k]) delete data[k];
+  else data[k] = Date.now();
+  save(current, data);
+  if (countDone(data) === TOTAL) toast('오늘 안약 다 넣었어요 👏');
+  render();
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ===== 이벤트 =====
+document.getElementById('prev').onclick = () => { current = keyOf(addDays(fromKey(current), -1)); render(); };
+document.getElementById('next').onclick = () => { current = keyOf(addDays(fromKey(current), 1)); render(); };
+document.getElementById('todayBtn').onclick = () => { current = todayKey(); render(); };
+const picker = document.getElementById('picker');
+document.getElementById('title').onclick = () => {
+  if (picker.showPicker) { try { picker.showPicker(); return; } catch {} }
+  picker.focus(); picker.click();
+};
+picker.onchange = () => { if (picker.value) { current = picker.value; render(); } };
+
+// 앱을 켜둔 채 날짜가 바뀌면 오늘로 갱신
+let lastToday = todayKey();
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && todayKey() !== lastToday) {
+    if (current === lastToday) current = todayKey();
+    lastToday = todayKey();
+    render();
+  }
+});
+
+render();
+</script>
+</body>
+</html>

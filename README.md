@@ -14,3 +14,12 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
+
+## 안약 체크 (`index.html`)
+
+날짜별 안약 점안 체크 앱. 브라우저로 `index.html`을 열면 바로 사용할 수 있고, 기록은 브라우저(localStorage)에 저장됩니다.
+
+- 아침/점심/저녁: 레바케이 1회, 인공눈물 2회
+- 자기 전: 타플로탄에스 1회
+
+스케줄을 바꾸려면 `index.html` 안의 `SCHEDULE` 배열을 수정하세요.
