@@ -5,8 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2f6fed">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="안약 체크">
-<title>안약 체크</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="눈건강">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>눈건강</title>
 <style>
   :root {
     --bg: #f4f6fa;
@@ -113,6 +118,16 @@
   .chk.on { background: var(--done-bg); border-color: var(--done); color: var(--done); }
   .chk:active { transform: scale(.96); }
 
+  .appname { font-size: 13px; font-weight: 700; color: var(--accent); text-align: center; margin-bottom: 8px; letter-spacing: .5px; }
+  details.backup { margin-top: 20px; color: var(--muted); font-size: 14px; }
+  details.backup summary { cursor: pointer; text-align: center; padding: 8px; }
+  details.backup .row { display: flex; gap: 8px; margin-top: 8px; }
+  details.backup button {
+    flex: 1; height: 44px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--card); color: var(--text); font: inherit; cursor: pointer;
+  }
+  details.backup p { font-size: 12px; line-height: 1.5; margin: 10px 4px 0; }
+
   .toast {
     position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom));
     transform: translateX(-50%) translateY(20px); opacity: 0;
@@ -125,6 +140,7 @@
 <body>
 <div class="wrap">
   <header>
+    <div class="appname">👁 눈건강</div>
     <div class="datebar">
       <button id="prev" aria-label="이전 날">‹</button>
       <div class="datetitle" id="title">
@@ -145,6 +161,16 @@
   </div>
 
   <div id="list"></div>
+
+  <details class="backup">
+    <summary>기록 백업 / 복원</summary>
+    <div class="row">
+      <button id="exportBtn">백업 파일 저장</button>
+      <button id="importBtn">백업 불러오기</button>
+    </div>
+    <input type="file" id="importFile" accept="application/json,.json" hidden>
+    <p>기록은 이 휴대폰 안에만 저장돼요. 휴대폰을 바꾸거나 앱을 지우기 전에 백업 파일을 저장해 두세요.</p>
+  </details>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -315,6 +341,47 @@ document.addEventListener('visibilitychange', () => {
     render();
   }
 });
+
+// ===== 백업 / 복원 =====
+document.getElementById('exportBtn').onclick = () => {
+  const all = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k.startsWith(PREFIX)) all[k.slice(PREFIX.length)] = load(k.slice(PREFIX.length));
+  }
+  const blob = new Blob([JSON.stringify({ app: '눈건강', version: 1, records: all }, null, 1)],
+    { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `눈건강-백업-${todayKey()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast(`${Object.keys(all).length}일치 기록을 저장했어요`);
+};
+const importFile = document.getElementById('importFile');
+document.getElementById('importBtn').onclick = () => importFile.click();
+importFile.onchange = async () => {
+  const f = importFile.files[0];
+  importFile.value = '';
+  if (!f) return;
+  try {
+    const json = JSON.parse(await f.text());
+    const recs = json.records;
+    if (!recs || typeof recs !== 'object') throw 0;
+    const days = Object.keys(recs).filter(k => /^\d{4}-\d{2}-\d{2}$/.test(k));
+    if (!confirm(`${days.length}일치 기록을 불러올까요? 같은 날짜는 합쳐져요.`)) return;
+    for (const k of days) save(k, { ...load(k), ...recs[k] });
+    render();
+    toast('복원했어요');
+  } catch { toast('백업 파일을 읽을 수 없어요'); }
+};
+
+// ===== 앱 설치 / 오프라인 =====
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+// 브라우저가 기록을 임의로 지우지 않도록 요청
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 
 render();
 </script>
