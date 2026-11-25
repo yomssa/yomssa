@@ -1,7 +1,7 @@
 // 오프라인에서도 앱이 열리도록 파일을 저장해 둡니다.
 // 앱을 업데이트할 때는 VERSION 숫자를 올리세요.
-const VERSION = "v1";
-const FILES = ["./", "./index.html", "./manifest.json", "./apple-touch-icon.png", "./icon-192.png", "./icon-512.png"];
+const VERSION = "v2";
+const FILES = ["./", "./index.html", "./app.js", "./apple-touch-icon.png", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));
