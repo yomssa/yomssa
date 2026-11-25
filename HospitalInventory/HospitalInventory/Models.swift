@@ -76,9 +76,11 @@ enum SeedData {
 
         Row(name: "써마지 600샷", category: "써마지", unit: "개", qty: 0),
         Row(name: "써마지 300샷", category: "써마지", unit: "개", qty: 0),
+        Row(name: "써마지 아이 450샷", category: "써마지", unit: "개", qty: 1),
 
         Row(name: "덴서티 클래식", category: "덴서티", unit: "개", qty: 0),
         Row(name: "덴서티 알파", category: "덴서티", unit: "개", qty: 0),
+        Row(name: "덴서티 하이", category: "덴서티", unit: "개", qty: 2),
 
         Row(name: "리쥬란", category: "리쥬란", unit: "개", qty: 21),
         Row(name: "리쥬란 HB", category: "리쥬란", unit: "개", qty: 4),
