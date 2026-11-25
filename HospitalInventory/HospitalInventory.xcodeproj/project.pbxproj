@@ -1,0 +1,284 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+/* Begin PBXBuildFile section */
+		B07520C593C87B00661EFED0 /* HospitalInventoryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD817F77253D489411ADA8B /* HospitalInventoryApp.swift */; };
+		DC80C462B4DB33AC8FCF9B9D /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ADEA43C3A17011B3921E58 /* Models.swift */; };
+		CAB078C6E4B372E74B67BA67 /* InventoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CA4434379137050392D027 /* InventoryStore.swift */; };
+		80D29A0CA3FCCF068BE0A049 /* InventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B36C4F75E4AABDF00224C9 /* InventoryListView.swift */; };
+		8989579A1A83306B0A07A902 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD0BBD8285C22D2D1B93C53 /* ItemDetailView.swift */; };
+		2816E0CA8F160B875413DDAD /* ItemFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D3DE8CA0F45F9C3EEF5EC4 /* ItemFormView.swift */; };
+		6DF8C77D19E5344FA9979A11 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA9DBF7D5C030330FA1C5F /* HistoryView.swift */; };
+		A3CE876236AC257EA80D968D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C60EC283D2697F9F2F1222A /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		996AD237BC284D463E664FFE /* HospitalInventory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HospitalInventory.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DFD817F77253D489411ADA8B /* HospitalInventoryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalInventoryApp.swift; sourceTree = "<group>"; };
+		99ADEA43C3A17011B3921E58 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		61CA4434379137050392D027 /* InventoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryStore.swift; sourceTree = "<group>"; };
+		34B36C4F75E4AABDF00224C9 /* InventoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryListView.swift; sourceTree = "<group>"; };
+		9DD0BBD8285C22D2D1B93C53 /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
+		77D3DE8CA0F45F9C3EEF5EC4 /* ItemFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemFormView.swift; sourceTree = "<group>"; };
+		4EFA9DBF7D5C030330FA1C5F /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		9C60EC283D2697F9F2F1222A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4F6F5CC3FCCF73F75AE9CCF4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2B731CEFC6751AAE0EC69B98 = {
+			isa = PBXGroup;
+			children = (
+				20F4BD606C0F6D1645AE4919 /* HospitalInventory */,
+				86024CAD1E83101D97359D73 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		86024CAD1E83101D97359D73 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				996AD237BC284D463E664FFE /* HospitalInventory.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		20F4BD606C0F6D1645AE4919 /* HospitalInventory */ = {
+			isa = PBXGroup;
+			children = (
+				DFD817F77253D489411ADA8B /* HospitalInventoryApp.swift */,
+				99ADEA43C3A17011B3921E58 /* Models.swift */,
+				61CA4434379137050392D027 /* InventoryStore.swift */,
+				34B36C4F75E4AABDF00224C9 /* InventoryListView.swift */,
+				9DD0BBD8285C22D2D1B93C53 /* ItemDetailView.swift */,
+				77D3DE8CA0F45F9C3EEF5EC4 /* ItemFormView.swift */,
+				4EFA9DBF7D5C030330FA1C5F /* HistoryView.swift */,
+				9C60EC283D2697F9F2F1222A /* Assets.xcassets */,
+			);
+			path = HospitalInventory;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42AEFBAE01D2DFD981F7DA7D /* HospitalInventory */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7250B11530CE7FE0B758435 /* Build configuration list for PBXNativeTarget "HospitalInventory" */;
+			buildPhases = (
+				F2AB5FB218DA8B84623F4557 /* Sources */,
+				4F6F5CC3FCCF73F75AE9CCF4 /* Frameworks */,
+				55B558C7EF820E6E00E5993B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HospitalInventory;
+			productName = HospitalInventory;
+			productReference = 996AD237BC284D463E664FFE /* HospitalInventory.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					42AEFBAE01D2DFD981F7DA7D = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 757D19E72591453AC5C4BDEC /* Build configuration list for PBXProject "HospitalInventory" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = ko;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				ko,
+				Base,
+			);
+			mainGroup = 2B731CEFC6751AAE0EC69B98;
+			productRefGroup = 86024CAD1E83101D97359D73 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42AEFBAE01D2DFD981F7DA7D /* HospitalInventory */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		55B558C7EF820E6E00E5993B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3CE876236AC257EA80D968D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F2AB5FB218DA8B84623F4557 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B07520C593C87B00661EFED0 /* HospitalInventoryApp.swift in Sources */,
+				DC80C462B4DB33AC8FCF9B9D /* Models.swift in Sources */,
+				CAB078C6E4B372E74B67BA67 /* InventoryStore.swift in Sources */,
+				80D29A0CA3FCCF068BE0A049 /* InventoryListView.swift in Sources */,
+				8989579A1A83306B0A07A902 /* ItemDetailView.swift in Sources */,
+				2816E0CA8F160B875413DDAD /* ItemFormView.swift in Sources */,
+				6DF8C77D19E5344FA9979A11 /* HistoryView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2FF62DEBCCFC95BC5233C381 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A7B0E3C213F89FA7C7AEB006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		685BB64ED0A39CDFE9D8EA39 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "병원 재고";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIFileSharingEnabled = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.HospitalInventory;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		1D9DEBDC9F11675DBB5F3508 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "병원 재고";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIFileSharingEnabled = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.HospitalInventory;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		757D19E72591453AC5C4BDEC /* Build configuration list for PBXProject "HospitalInventory" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2FF62DEBCCFC95BC5233C381 /* Debug */,
+				A7B0E3C213F89FA7C7AEB006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7250B11530CE7FE0B758435 /* Build configuration list for PBXNativeTarget "HospitalInventory" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				685BB64ED0A39CDFE9D8EA39 /* Debug */,
+				1D9DEBDC9F11675DBB5F3508 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
+}
