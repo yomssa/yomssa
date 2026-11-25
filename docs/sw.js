@@ -1,6 +1,6 @@
 // 오프라인에서도 앱이 열리도록 파일을 저장해 둡니다.
 // 앱을 업데이트할 때는 VERSION 숫자를 올리세요.
-const VERSION = "v2";
+const VERSION = "hospital-inventory-v3"; // 같은 주소의 다른 앱(눈건강 등)과 캐시 이름이 겹치지 않게
 const FILES = ["./", "./index.html", "./app.js", "./apple-touch-icon.png", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {
@@ -10,7 +10,7 @@ self.addEventListener("install", (e) => {
 self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k.startsWith("hospital-inventory-") && k !== VERSION).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
